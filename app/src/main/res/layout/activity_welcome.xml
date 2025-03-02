@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/welcome_page_background_image"
+    android:visibility="visible"
+    tools:context=".WelcomeActivity">
+
+    <Button
+        android:id="@+id/gotologinpage"
+        style="@style/Widget.Material3.Button.OutlinedButton.Icon"
+        android:layout_width="match_parent"
+        android:layout_height="89dp"
+        android:layout_marginTop="184dp"
+        android:text="Login"
+        android:textAlignment="center"
+        android:textAllCaps="true"
+        android:textColor="#0FC8DF"
+        android:textColorLink="#BD9418"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.657"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/welcometext" />
+
+    <Button
+        android:id="@+id/gotoregister"
+        style="@style/Widget.Material3.Button.OutlinedButton.Icon"
+        android:layout_width="match_parent"
+        android:layout_height="84dp"
+        android:layout_marginTop="92dp"
+        android:text="Register"
+        android:textAlignment="center"
+        android:textAllCaps="true"
+        android:textColor="#00BCD4"
+        android:textColorLink="#BD9418"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/gotologinpage" />
+
+    <TextView
+        android:id="@+id/welcometext"
+        android:layout_width="315dp"
+        android:layout_height="49dp"
+        android:layout_marginTop="152dp"
+        android:fontFamily="sans-serif"
+        android:text="@string/welcometextstring"
+        android:textColor="#E1D0D0"
+        android:textSize="34sp"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout_editor_absoluteX="48dp" />
+</androidx.constraintlayout.widget.ConstraintLayout>

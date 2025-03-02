@@ -11,54 +11,43 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-public class MainActivity extends AppCompatActivity {
-    Button new_check , searchusingdate , seachusingnumber , editmenu ;
+public class WelcomeActivity extends AppCompatActivity {
+
+    Button go_to_login_page_button , go_to_register_page_button ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_welcome);
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
 
-        new_check = findViewById(R.id.main_new_check);
-        searchusingdate = findViewById(R.id.main_searchusingdate);
-        seachusingnumber = findViewById(R.id.main_seachusingnumber);
-        editmenu = findViewById(R.id.main_editmenu);
+        go_to_login_page_button = findViewById(R.id.gotologinpage);
+        go_to_register_page_button = findViewById(R.id.gotoregister);
 
-        new_check.setOnClickListener(new View.OnClickListener() {
+
+        go_to_login_page_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Intent intent = new Intent(WelcomeActivity.this, LoginActivity.class);
+                startActivity(intent);
 
             }
         });
 
-        searchusingdate.setOnClickListener(new View.OnClickListener() {
+        go_to_register_page_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-            }
-        });
-
-        seachusingnumber.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
-
-        editmenu.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                Intent intent = new Intent(MainActivity.this, Editmenu.class);
+                Intent intent = new Intent(WelcomeActivity.this, RegisterActivity.class);
                 startActivity(intent);
             }
         });
+
 
 
     }
