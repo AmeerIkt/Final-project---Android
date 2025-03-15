@@ -164,9 +164,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return db.rawQuery("SELECT * FROM " + TABLE_CHECKS + " WHERE " + COLUMN_ID + " = ?", new String[]{String.valueOf(checkId)});
     }
 
-    public Cursor getChecksByDate(String date) {
+    public Cursor getChecksByDateRange(long startTimestamp, long endTimestamp) {
         SQLiteDatabase db = this.getReadableDatabase();
-        return db.rawQuery("SELECT * FROM " + TABLE_CHECKS + " WHERE DATE(" + COLUMN_TIMESTAMP + ") = ?", new String[]{date});
+        String query = "SELECT * FROM checks WHERE timestamp BETWEEN ? AND ?";
+        return db.rawQuery(query, new String[]{String.valueOf(startTimestamp), String.valueOf(endTimestamp)});
     }
 
     public Cursor getCheckItems(int checkId) {

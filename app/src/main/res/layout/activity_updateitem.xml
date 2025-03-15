@@ -40,6 +40,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/item_priceupdate_input" />
 
+
+
     <EditText
         android:id="@+id/item_priceupdate_input"
         android:layout_width="match_parent"

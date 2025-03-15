@@ -26,6 +26,13 @@
         android:layout_height="wrap_content"
         android:text="Check results will appear here"
         android:paddingTop="10dp"/>
+    <ListView
+        android:id="@+id/listViewChecks"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:divider="@android:color/darker_gray"
+        android:dividerHeight="1dp"/>
+
 </LinearLayout>
 
 
