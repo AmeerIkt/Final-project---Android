@@ -3,157 +3,180 @@ package com.example.finalproject0;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.widget.Toast;
-
-import androidx.annotation.Nullable;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
+    private static final String DATABASE_NAME = "final_project.db";
+    private static final int DATABASE_VERSION = 4;
 
-    private static final String DATABASE_NAME = "billsapp.db";
-    private static final int DATABASE_VERSION = 2;
-
-
-    //the Users table and columns
-    private static final String TABLE_USERS = "Users";
-    private static final String COLUMN_USER_ID = "id";
+    // Table for users
+    private static final String TABLE_USERS = "users";
+    private static final String COLUMN_USER_ID = "user_id";
     private static final String COLUMN_USERNAME = "username";
     private static final String COLUMN_PASSWORD = "password";
 
+    // Table for checks
+    private static final String TABLE_CHECKS = "checks";
+    private static final String COLUMN_ID = "id";
+    private static final String COLUMN_TIMESTAMP = "timestamp";
 
-    ///// the items table and columns
-
-    private static final String TABLE_ITEMS = "Items";
-    private static final String COLUMN_ITEM_ID = "Id";
+    // Table for items
+    private static final String TABLE_ITEMS = "items";
+    private static final String COLUMN_ITEM_ID = "item_id";
     private static final String COLUMN_ITEM_NAME = "name";
     private static final String COLUMN_ITEM_PRICE = "price";
 
+    // Table for check items
+    private static final String TABLE_CHECK_ITEMS = "check_items";
+    private static final String COLUMN_CHECK_ID = "check_id";
+    private static final String COLUMN_QUANTITY = "quantity";
 
-    ///// the bills table and columns
-
-    private static final String TABLE_BILLS = "Bills";
-    private static final String COLUMN_BILL_DATE = "date";
-
-    private static final String COLUMN_BILL_SUM = "sum";
-
-    /////-----------------------------------------
-
-
-    public DatabaseHelper(@Nullable Context context) {
+    public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-
         String createUsersTable = "CREATE TABLE " + TABLE_USERS + " (" +
                 COLUMN_USER_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                COLUMN_USERNAME + " TEXT, " +
-                COLUMN_PASSWORD + " TEXT)";
-        db.execSQL(createUsersTable);
+                COLUMN_USERNAME + " TEXT UNIQUE, " +
+                COLUMN_PASSWORD + " TEXT);";
 
+        String createChecksTable = "CREATE TABLE " + TABLE_CHECKS + " (" +
+                COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                COLUMN_TIMESTAMP + " TIMESTAMP DEFAULT CURRENT_TIMESTAMP);";
 
         String createItemsTable = "CREATE TABLE " + TABLE_ITEMS + " (" +
                 COLUMN_ITEM_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                COLUMN_ITEM_NAME + " TEXT, " +
-                COLUMN_ITEM_PRICE + " TEXT)";
+                COLUMN_ITEM_NAME + " TEXT UNIQUE, " +
+                COLUMN_ITEM_PRICE + " REAL);";
+
+        String createCheckItemsTable = "CREATE TABLE " + TABLE_CHECK_ITEMS + " (" +
+                COLUMN_CHECK_ID + " INTEGER, " +
+                COLUMN_ITEM_ID + " INTEGER, " +
+                COLUMN_QUANTITY + " INTEGER, " +
+                "FOREIGN KEY(" + COLUMN_CHECK_ID + ") REFERENCES " + TABLE_CHECKS + "(" + COLUMN_ID + "), " +
+                "FOREIGN KEY(" + COLUMN_ITEM_ID + ") REFERENCES " + TABLE_ITEMS + "(" + COLUMN_ITEM_ID + "));";
+
+        db.execSQL(createUsersTable);
+        db.execSQL(createChecksTable);
         db.execSQL(createItemsTable);
-
-
-
-
-///////////////////////////////////
+        db.execSQL(createCheckItemsTable);
     }
+
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_USERS);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_ITEMS);
-        ///////////db.execSQL("DROP TABLE IF EXISTS " + TABLE_QUESTIONS);
-        //////db.execSQL("DROP TABLE IF EXISTS " + TABLE_SCORES);
-
-
-
-        onCreate(db);
-
+        if (oldVersion < 4) {
+            db.execSQL("DROP TABLE IF EXISTS " + TABLE_USERS);
+            db.execSQL("DROP TABLE IF EXISTS " + TABLE_CHECK_ITEMS);
+            db.execSQL("DROP TABLE IF EXISTS " + TABLE_ITEMS);
+            db.execSQL("DROP TABLE IF EXISTS " + TABLE_CHECKS);
+            onCreate(db);
+        }
     }
-    public void addUser(String username, String password) {
+
+    public long createNewCheck() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_TIMESTAMP, System.currentTimeMillis()); // Store a timestamp manually
+        return db.insert(TABLE_CHECKS, null, values);
+    }
+
+    public Cursor getAllChecks() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        return db.rawQuery("SELECT * FROM " + TABLE_CHECKS + " ORDER BY " + COLUMN_ID + " ASC", null);
+    }
+
+    public Cursor getAllItems() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        return db.rawQuery("SELECT * FROM " + TABLE_ITEMS, null);
+    }
+
+    public long addItemToCheck(int checkId, int itemId, int quantity) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_CHECK_ID, checkId);
+        values.put(COLUMN_ITEM_ID, itemId);
+        values.put(COLUMN_QUANTITY, quantity);
+        return db.insert(TABLE_CHECK_ITEMS, null, values);
+    }
+
+    public long registerUser(String username, String password) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(COLUMN_USERNAME, username);
         values.put(COLUMN_PASSWORD, password);
-        db.insert(TABLE_USERS, null, values);
-        db.close();
+        return db.insert(TABLE_USERS, null, values);
     }
-    public void addItem(String name, String price) {
+
+    public boolean checkUser(String username, String password) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_USERS + " WHERE " + COLUMN_USERNAME + " = ? AND " + COLUMN_PASSWORD + " = ?", new String[]{username, password});
+        boolean exists = (cursor.getCount() > 0);
+        cursor.close();
+        return exists;
+    }
+
+    public boolean isItemNameTaken(String namedata) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_ITEMS + " WHERE " + COLUMN_ITEM_NAME + " = ?", new String[]{namedata});
+        boolean exists = (cursor.getCount() > 0);
+        cursor.close();
+        return exists;
+    }
+
+    public long addItem(String namedata, double pricedata) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        if (isItemNameTaken(namedata)) {
+            return -1; // Item already exists
+        }
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_ITEM_NAME, namedata);
+        values.put(COLUMN_ITEM_PRICE, pricedata);
+        return db.insert(TABLE_ITEMS, null, values);
+    }
+
+    public boolean isUsernameTaken(String usernamedata) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_USERS + " WHERE " + COLUMN_USERNAME + " = ?", new String[]{usernamedata});
+        boolean exists = (cursor.getCount() > 0);
+        cursor.close();
+        return exists;
+    }
+
+    public int updateItems(String updatedName, double updatedPrice, int id) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
-        values.put(COLUMN_ITEM_NAME, name);
-        values.put(COLUMN_ITEM_PRICE, price);
-        db.insert(TABLE_ITEMS, null, values);
-        db.close();
+        values.put(COLUMN_ITEM_NAME, updatedName);
+        values.put(COLUMN_ITEM_PRICE, updatedPrice);
+        return db.update(TABLE_ITEMS, values, COLUMN_ITEM_ID + " = ?", new String[]{String.valueOf(id)});
     }
 
-    public boolean validateUser(String username, String password) {
+    public int deleteItem(int id) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        return db.delete(TABLE_ITEMS, COLUMN_ITEM_ID + " = ?", new String[]{String.valueOf(id)});
+    }
+
+    public Cursor getCheckById(int checkId) {
         SQLiteDatabase db = this.getReadableDatabase();
-
-        String query = "SELECT * FROM " + TABLE_USERS + " WHERE " + COLUMN_USERNAME + "=? AND " + COLUMN_PASSWORD + "=?";
-        Cursor cursor = db.rawQuery(query, new String[]{username, password});
-        boolean result = cursor.moveToFirst();
-        cursor.close();
-        db.close();
-        return result;
+        return db.rawQuery("SELECT * FROM " + TABLE_CHECKS + " WHERE " + COLUMN_ID + " = ?", new String[]{String.valueOf(checkId)});
     }
 
-    public boolean isUsernameTaken(String username) {
+    public Cursor getChecksByDate(String date) {
         SQLiteDatabase db = this.getReadableDatabase();
-        String query = "SELECT * FROM " + TABLE_USERS + " WHERE " + COLUMN_USERNAME + "=?";
-        Cursor cursor = db.rawQuery(query, new String[]{username});
-
-        boolean exists = cursor.moveToFirst();
-        cursor.close();
-        db.close();
-
-        return exists;
+        return db.rawQuery("SELECT * FROM " + TABLE_CHECKS + " WHERE DATE(" + COLUMN_TIMESTAMP + ") = ?", new String[]{date});
     }
-    public boolean isItemnameTaken(String name){
 
+    public Cursor getCheckItems(int checkId) {
         SQLiteDatabase db = this.getReadableDatabase();
-        String query = "SELECT * FROM " + TABLE_ITEMS + " WHERE " + COLUMN_ITEM_NAME + "=?";
-        Cursor cursor = db.rawQuery(query, new String[]{name});
-
-        boolean exists = cursor.moveToFirst();
-        cursor.close();
-        db.close();
-
-        return exists;
-
+        return db.rawQuery(
+                "SELECT i.name, c.quantity, i.price " +
+                        "FROM check_items c " +
+                        "JOIN items i ON c.item_id = i.item_id " +
+                        "WHERE c.check_id = ?",
+                new String[]{String.valueOf(checkId)}
+        );
     }
-
-    Cursor readAllItems (){
-        String query = "SELECT * FROM " + TABLE_ITEMS;
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = null ;
-        if (db != null) {
-            cursor = db.rawQuery(query , null);
-        }
-        return cursor;
-
-    }
-
-    void updateitems (String name , String price , String item_id) {
-        SQLiteDatabase db = this.getReadableDatabase();
-        ContentValues cv = new ContentValues() ;
-        cv.put (COLUMN_ITEM_NAME , name);
-        cv.put(COLUMN_ITEM_PRICE , price );
-
-    db.update(TABLE_ITEMS , cv , " id=?" , new String[]{item_id});
-
-    }
-
-    void deleteitem (String item_id) {
-        SQLiteDatabase db = this.getReadableDatabase();
-        db.delete(TABLE_ITEMS, " id=?", new String[]{item_id});
-    }
-
 }

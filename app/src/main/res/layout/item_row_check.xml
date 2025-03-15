@@ -1,0 +1,38 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="8dp">
+
+    <TextView
+        android:id="@+id/textItemName"
+        android:layout_width="0dp"
+        android:layout_weight="2"
+        android:layout_height="wrap_content"
+        android:text="Item Name"/>
+
+    <TextView
+        android:id="@+id/textItemPrice"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="wrap_content"
+        android:text="Price"/>
+
+    <Button
+        android:id="@+id/buttonDecrease"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="-"/>
+
+    <TextView
+        android:id="@+id/textQuantity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="0"/>
+
+    <Button
+        android:id="@+id/buttonIncrease"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="+"/>
+</LinearLayout>

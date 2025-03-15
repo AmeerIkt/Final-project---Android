@@ -33,6 +33,8 @@ public class MainActivity extends AppCompatActivity {
         new_check.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, NewCheck.class);
+                startActivity(intent);
 
             }
         });
@@ -40,6 +42,8 @@ public class MainActivity extends AppCompatActivity {
         searchusingdate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, searchcheckdate.class);
+                startActivity(intent);
 
             }
         });
@@ -47,6 +51,8 @@ public class MainActivity extends AppCompatActivity {
         seachusingnumber.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, searchcheckid.class);
+                startActivity(intent);
 
             }
         });

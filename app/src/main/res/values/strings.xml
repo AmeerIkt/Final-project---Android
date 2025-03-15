@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">FinalProject0</string>
-    <string name="welcometextstring">Welcome to 000000 </string>
+    <string name="welcometextstring">Welcome</string>
     <string name="title_activity_login">LoginActivity</string>
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Password</string>

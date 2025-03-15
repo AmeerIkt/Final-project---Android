@@ -75,7 +75,7 @@ public class Editmenu extends AppCompatActivity {
     }
 
     void fetchdata (){
-        Cursor cursor = db.readAllItems();
+        Cursor cursor = db.getAllItems();
         if (cursor.getCount() == 0){
             Toast.makeText(this, "Nothing to read", Toast.LENGTH_SHORT).show();
         }

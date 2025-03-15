@@ -59,7 +59,7 @@ public class RegisterActivity extends AppCompatActivity {
                 }
 
                 if (!databaseHelper.isUsernameTaken(usernamedata) && passworddatacheck.equals(passworddata)) {
-                    databaseHelper.addUser(usernamedata , passworddata);
+                    databaseHelper.registerUser(usernamedata , passworddata);
                     finish();
                 }
 

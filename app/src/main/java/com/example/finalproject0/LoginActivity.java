@@ -44,7 +44,7 @@ public class LoginActivity extends AppCompatActivity {
                 String usernamedata = username_input.getText().toString().trim();
                 String passworddata = password_input.getText().toString().trim();
 
-                if (databaseHelper.validateUser(usernamedata, passworddata)) {
+                if (databaseHelper.checkUser(usernamedata, passworddata)) {
                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                     //intent.putExtra("username", usernamedata);
                     startActivity(intent);

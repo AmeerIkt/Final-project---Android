@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools" >
 
     <application
         android:allowBackup="true"
@@ -11,11 +11,23 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.FinalProject0"
-        tools:targetApi="35">
+        tools:targetApi="35" >
         <activity
-            android:parentActivityName=".Editmenu"
-            android:name=".updateitem"
+            android:name=".Checksummary"
             android:exported="false" />
+        <activity
+            android:name=".searchcheckdate"
+            android:exported="false" />
+        <activity
+            android:name=".searchcheckid"
+            android:exported="false" />
+        <activity
+            android:name=".NewCheck"
+            android:exported="false" />
+        <activity
+            android:name=".updateitem"
+            android:exported="false"
+            android:parentActivityName=".Editmenu" />
         <activity
             android:name=".additem"
             android:exported="false" />
@@ -30,7 +42,7 @@
             android:exported="false" />
         <activity
             android:name=".WelcomeActivity"
-            android:exported="true">
+            android:exported="true" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -39,7 +51,7 @@
         </activity>
         <activity
             android:name=".MainActivity"
-            android:exported="true">
+            android:exported="true" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

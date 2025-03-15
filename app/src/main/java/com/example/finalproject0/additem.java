@@ -42,8 +42,8 @@ public class additem extends AppCompatActivity {
                 String namedata = name_input.getText().toString().trim();
                 String pricedata = price_input.getText().toString().trim();
 
-                if (!databaseHelper.isItemnameTaken(namedata)){
-                    databaseHelper.addItem(namedata , pricedata);
+                if (!databaseHelper.isItemNameTaken(namedata)){
+                    databaseHelper.addItem(namedata , Double.parseDouble(pricedata));
                     finish();
                 }
                 else {

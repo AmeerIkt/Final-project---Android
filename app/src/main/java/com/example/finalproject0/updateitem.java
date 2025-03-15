@@ -17,7 +17,11 @@ public class updateitem extends AppCompatActivity {
     EditText name_txt  , price_txt ;
     TextView id_show ;
     Button update , delete ;
-    String id , name , price , updatedname , updatedprice  ;
+    String id;
+    String name;
+    String price;
+    String updatedname;
+    double updatedprice  ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,9 +51,9 @@ public class updateitem extends AppCompatActivity {
             public void onClick(View v) {
 
                 updatedname = String.valueOf(name_txt.getText());
-                updatedprice = String.valueOf(price_txt.getText());
+                updatedprice = Double.parseDouble(String.valueOf(price_txt.getText()));
 
-                db.updateitems(updatedname , updatedprice , id);
+                db.updateItems(updatedname , updatedprice , Integer.parseInt(id));
                 finish();
 
 
@@ -61,7 +65,7 @@ public class updateitem extends AppCompatActivity {
         delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                db.deleteitem(id);
+                db.deleteItem(Integer.parseInt(id));
                 finish();
 
             }

@@ -1,0 +1,32 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:padding="16dp"
+    tools:context=".searchcheckdate">
+
+
+    <EditText
+        android:id="@+id/inputDate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter Date (YYYY-MM-DD)"
+        android:inputType="date"/>
+
+    <Button
+        android:id="@+id/searchButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Search Checks"/>
+
+    <TextView
+        android:id="@+id/checkResults"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Check results will appear here"
+        android:paddingTop="10dp"/>
+</LinearLayout>
+
+
+
